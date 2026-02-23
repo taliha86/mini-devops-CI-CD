@@ -1,0 +1,74 @@
+NGINX Redirection – Practical Notes
+1. What is Redirection in NGINX?
+
+Redirection in NGINX means sending a response to the client (browser) instructing it to request a different URL.
+The browser receives an HTTP redirect status code and automatically navigates to the new URL.
+
+2. Difference Between Redirection and Forwarding
+
+Redirection:
+
+Client (browser) is redirected to a new URL
+
+URL in browser changes
+
+Uses return or rewrite directive
+
+Example: HTTP → HTTPS
+
+Forwarding (Reverse Proxy):
+
+NGINX forwards request to backend server
+
+Browser URL does not change
+
+Uses proxy_pass directive
+
+3. Common Use Cases of Redirection
+
+Redirect HTTP traffic to HTTPS
+
+Redirect old URLs to new URLs
+
+Redirect www domain to non-www domain
+
+Redirect specific paths (e.g., /old to /new)
+
+4. Basic Redirection Syntax in NGINX
+return 301 http://example.com;
+
+This sends a permanent redirect (301) to the browser.
+
+5. Redirect a Specific Path
+location /old {
+    return 301 /new;
+}
+
+When user visits /old, they are redirected to /new.
+
+6. HTTP to HTTPS Redirection Example
+server {
+    listen 80;
+    return 301 https://$host$request_uri;
+}
+
+This redirects all HTTP traffic to HTTPS.
+
+7. Redirect Status Codes
+Code	Description
+301	Permanent redirect
+302	Temporary redirect
+307	Temporary redirect (keeps request method)
+308	Permanent redirect (keeps request method)
+
+Most commonly used: 301
+
+8. Difference Between Redirection and proxy_pass
+
+Redirection (browser moves):
+
+return 301 http://localhost:8080;
+
+Forwarding (NGINX moves):
+
+proxy_pass http://localhost:8080;
